@@ -40,4 +40,34 @@ public class PlaylistTest {
 
         assertTrue(dupsko == playlist.atSecond(200));
     }
+
+    //Zmodyfikuj metodę atSecond, aby rozróżniała podanie ujemnego czasu i czasu wykraczającego poza czas trwania listy i zapisywała w argumencie message konstruktora IndexOutOfBoundsException odpowiedni napis. Napisz dwa testy sprawdzające każdy z wymienionych przypadków.
+
+    @Test
+    public void test_atSecond_toMuchTime(){
+        Playlist playlist = new Playlist();
+        Song dupsko = new Song("dupa", "rzepa", 200);
+        playlist.add(dupsko);
+
+        int seconds = 5000;
+        Exception exception = assertThrows(IndexOutOfBoundsException.class, () -> {
+            playlist.atSecond(seconds);
+        });
+
+        assertEquals("Podano za duży czas\n", exception.getMessage());
+    }
+
+    @Test
+    public void test_atSecond_negativeTime(){
+        Playlist playlist = new Playlist();
+        Song dupsko = new Song("dupa", "rzepa", 200);
+        playlist.add(dupsko);
+
+        int seconds = -5;
+        Exception exception = assertThrows(IndexOutOfBoundsException.class, () -> {
+            playlist.atSecond(seconds);
+        });
+
+        assertEquals("Podano ujemny czas\n", exception.getMessage());
+    }
 }
