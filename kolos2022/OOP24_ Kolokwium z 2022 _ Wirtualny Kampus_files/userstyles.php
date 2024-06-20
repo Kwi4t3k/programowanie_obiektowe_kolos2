@@ -1,1 +1,0 @@
-#block_accessibility_colour2{background-color:#FFFFCC !important;}#block_accessibility_colour3{background-color:#99CCFF !important;}#block_accessibility_colour4{color:#FFFF00 !important;background-color:#000000 !important;}
