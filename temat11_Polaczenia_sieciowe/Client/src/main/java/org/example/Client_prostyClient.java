@@ -4,7 +4,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Client {
+public class Client_prostyClient {
     public static void main(String[] args) {
         Socket socket = null;
         InputStreamReader inputStreamReader = null;
