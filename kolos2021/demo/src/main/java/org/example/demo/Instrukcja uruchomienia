@@ -1,0 +1,28 @@
+1. Upewnij się, że masz zainstalowane Java Development Kit (JDK) oraz JavaFX.
+
+2. Skopiuj wszystkie powyższe klasy do odpowiednich plików .java w swoim projekcie.
+
+3. Skompiluj projekt:
+
+    javac Main.java Server.java DrawPane.java LineSegment.java
+
+4. Uruchom projekt:
+
+    java Main
+
+Testowanie:
+
+1. Uruchom aplikację, zobaczysz białe okno 500x500 pikseli.
+
+2. Podłącz się do serwera za pomocą dowolnego klienta TCP (np. telnet, nc):
+
+    telnet localhost 1234
+
+3. Wpisz sześciocyfrową liczbę szesnastkową reprezentującą kolor, np. FF0000 dla czerwonego.
+
+4. Następnie wpisz cztery liczby zmiennoprzecinkowe oddzielone spacjami reprezentujące współrzędne dwóch punktów ograniczających odcinek
+, np. 100.0 100.0 400.0 400.0.
+
+5. Odcinek pojawi się na kanwie w wybranym kolorze.
+
+6. Możesz używać klawiszy strzałek do przesuwania układu współrzędnych.
