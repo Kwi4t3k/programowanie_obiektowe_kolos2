@@ -1,0 +1,51 @@
+Zadanie polega na napisaniu serwera, który będzie przyjmował plik PNG od klienta,
+przetwarzał go przy użyciu algorytmu box blur, zapisywał przetworzony obraz do bazy danych SQLite
+i odsyłał zmodyfikowany obraz do klienta. Dodatkowo, serwer powinien mieć interfejs użytkownika pozwalający
+ustawić rozmiar jądra splotu za pomocą suwaka.
+
+
+Wyjaśnienie kodu
+Główne elementy
+Main i start:
+
+main(String[] args): Metoda główna uruchamia aplikację JavaFX i serwer w osobnym wątku.
+start(Stage primaryStage): Metoda start tworzy interfejs użytkownika z suwakami i etykietami do ustawiania wielkości jądra splotu.
+
+Interfejs użytkownika:
+
+Slider slider: Suwak do ustawiania wielkości jądra splotu.
+Label label: Etykieta wyświetlająca aktualną wielkość jądra splotu.
+
+Obsługa klienta:
+
+handleClient(Socket socket): Metoda obsługująca połączenie z klientem. Odbiera plik graficzny, przetwarza go i odsyła przetworzony plik do klienta.
+
+Przetwarzanie obrazu:
+
+applyBoxBlur(Image image, int kernelSize): Metoda do zastosowania algorytmu box blur. W tej implementacji jest to placeholder, który należy zamienić na rzeczywisty kod przetwarzania obrazu.
+
+Logowanie do bazy danych:
+
+logToDatabase(String path, int size, long delay): Metoda zapisująca informacje o przetworzonym obrazie do bazy danych SQLite.
+
+Dodatkowe wyjaśnienia
+Tworzenie katalogów:
+
+Path imageDir = Paths.get("images"): Tworzy obiekt Path wskazujący na katalog images.
+Files.createDirectories(imageDir): Tworzy katalog images, jeśli nie istnieje.
+
+Odbieranie pliku:
+
+FileOutputStream fos = new FileOutputStream(filePath.toFile()): Tworzy strumień do zapisu pliku graficznego.
+in.read(buffer): Odczytuje dane od klienta i zapisuje je do pliku.
+
+Przesyłanie pliku:
+
+FileInputStream fis = new FileInputStream(blurredFile): Tworzy strumień do odczytu przetworzonego pliku.
+out.write(buffer, 0, bytesRead): Wysyła przetworzony plik do klienta.
+
+Obsługa bazy danych:
+
+DriverManager.getConnection(DB_URL): Nawiązuje połączenie z bazą danych SQLite.
+stmt.execute(sql): Wykonuje zapytanie SQL do utworzenia tabeli.
+pstmt.executeUpdate(): Wykonuje zapytanie SQL do wstawienia danych do tabeli.
