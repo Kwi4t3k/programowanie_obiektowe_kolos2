@@ -8,3 +8,6 @@ https://www.youtube.com/watch?v=gchR3DpY-8Q
 
 ## Java Sockets File Transfer Tutorial: Send Files Between Client and Server
 https://www.youtube.com/watch?v=dqgq72gOe20
+
+## Convert an Image file to Base64 string in java
+https://www.youtube.com/watch?v=M1aWWLnygdU
