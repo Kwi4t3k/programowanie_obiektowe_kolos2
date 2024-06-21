@@ -20,17 +20,20 @@ public class ImageProcessor {
 
     // Metoda wczytująca obraz z podanej ścieżki do pola klasy
     public void readImage(String path) throws IOException {
+        // Wczytanie obrazu z pliku o podanej ścieżce
         image = ImageIO.read(new File(path));
     }
 
     // Metoda zapisująca obraz z pola klasy do podanej ścieżki
     public void writeImage(String path) throws IOException {
+        // Zapisanie obrazu do pliku o podanej ścieżce
         ImageIO.write(image, "jpg", new File(path));
     }
 
     //Dodaj metodę, która zwiększy jasność obrazu o podaną stałą.
     // Metoda zwiększająca jasność obrazu o podaną wartość
     public void setBrightness(int brightness){
+        // Przejście przez wszystkie piksele obrazu
         for (int y = 0; y < image.getHeight(); y++){
             for (int x = 0; x < image.getWidth(); x++) {
 
@@ -58,11 +61,14 @@ public class ImageProcessor {
     //Dodaj metodę, która wykona to samo działanie, dzieląc zadanie na określoną liczbę wątków. Liczbę wątków należy powiązać z liczbą dostępnych rdzeni procesora. Porównaj czas wykonania obu metod.
     // Metoda zwiększająca jasność obrazu o podaną wartość, wykorzystująca wielowątkowość
     public void setBrightness2(int brightness) throws InterruptedException {
-        int threadsCount = Runtime.getRuntime().availableProcessors(); // Pobranie liczby dostępnych rdzeni procesora
+        // Pobranie liczby dostępnych rdzeni procesora
+        int threadsCount = Runtime.getRuntime().availableProcessors();
         Thread[] threads;
         threads = new Thread[threadsCount];
-        int chunk = image.getHeight()/threadsCount; // Podział obrazu na fragmenty
+        // Podział obrazu na fragmenty
+        int chunk = image.getHeight()/threadsCount;
 
+        // Utworzenie i uruchomienie wątków
         for (int i = 0; i < threadsCount; i++) {
             int begin = i * chunk;
             int end;
@@ -76,6 +82,7 @@ public class ImageProcessor {
             threads[i] = new Thread(new SetBrightnessWorker(begin, end, brightness, image));
             threads[i].start();
         }
+        // Oczekiwanie na zakończenie wszystkich wątków
         for (int i = 0; i < threadsCount; i++) {
             threads[i].join();
         }
@@ -84,9 +91,12 @@ public class ImageProcessor {
     //Dodaje metodę, która wykona to samo działanie w oparciu o pulę wątków. Jeden wątek powinien obsłużyć jeden wiersz obrazu. Dodaj czas wykonania tej metody do porównania.
     // Metoda zwiększająca jasność obrazu o podaną wartość, wykorzystująca pulę wątków
     public void setBrightnessThreadPool(int brightness){
-        int threadsCount = Runtime.getRuntime().availableProcessors(); // Pobranie liczby dostępnych rdzeni procesora
-        ExecutorService executor = Executors.newFixedThreadPool(threadsCount); // Utworzenie puli wątków
+        // Pobranie liczby dostępnych rdzeni procesora
+        int threadsCount = Runtime.getRuntime().availableProcessors();
+        // Utworzenie puli wątków
+        ExecutorService executor = Executors.newFixedThreadPool(threadsCount);
 
+        // Utworzenie i uruchomienie wątków
         for (int i = 0; i < image.getHeight(); i++) {
             final int y = i;
             executor.execute(() -> {
@@ -118,6 +128,7 @@ public class ImageProcessor {
         int height = image.getHeight();
         int[] histogram = new int[256]; // Tablica przechowująca histogram
 
+        // Przejście przez wszystkie piksele obrazu
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 int rgb = image.getRGB(i, j); // Pobranie wartości RGB piksela
@@ -148,10 +159,13 @@ public class ImageProcessor {
     public void generateHistogramImage(int[] histogram, String path) throws IOException {
         int width = 256;
         int height = 100;
-        BufferedImage histogramImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); // Utworzenie nowego obrazu
+        // Utworzenie nowego obrazu
+        BufferedImage histogramImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
-        int max = Arrays.stream(histogram).max().getAsInt(); // Pobranie maksymalnej wartości histogramu
+        // Pobranie maksymalnej wartości histogramu
+        int max = Arrays.stream(histogram).max().getAsInt();
 
+        // Generowanie wykresu histogramu
         for (int i = 0; i < width; i++) {
             int value = (int) (((double) histogram[i] / max) * height); // Obliczenie wysokości słupka na wykresie
 
@@ -163,6 +177,7 @@ public class ImageProcessor {
                 }
             }
         }
-        ImageIO.write(histogramImage, "png", new File(path)); // Zapisanie obrazu do pliku
+        // Zapisanie obrazu do pliku
+        ImageIO.write(histogramImage, "png", new File(path));
     }
 }

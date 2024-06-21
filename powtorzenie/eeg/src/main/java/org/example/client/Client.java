@@ -17,37 +17,53 @@ import java.util.Scanner;
 //Po zakończeniu aplikacja wyśle wiadomość informującą serwer o zakończeniu przesyłania(np. bye).
 //
 //Wysyłanie wszystkich tych informacji odseparuj w oddzielnej funkcji: public void sendData(String name, String filepath)
+// Klasa Client reprezentuje aplikację kliencką
 public class Client {
 
+    // Główna metoda programu
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+        // Prosimy użytkownika o wprowadzenie nazwy użytkownika
         System.out.println("Enter username: ");
         String username = scanner.nextLine();
 
+        // Prosimy użytkownika o wprowadzenie ścieżki do pliku CSV
         System.out.println("Enter CSV file path: ");
         String filepath = scanner.nextLine();
 
+        // Wysyłamy dane do serwera
         sendData(username, filepath);
     }
 
+    // Metoda do wysyłania danych do serwera
     public static void sendData(String name, String filepath) {
-        try (Socket socket = new Socket("localhost", 1234);
-             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+        try (
+                // Tworzymy gniazdo (socket) do komunikacji z serwerem
+                Socket socket = new Socket("localhost", 1234);
 
-            out.println(name); // Send username to the server
+                // Tworzymy pisarza do wysyłania danych do serwera
+                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
+                // Tworzymy czytnika do odczytywania danych od serwera
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
+        ) {
+            // Wysyłamy nazwę użytkownika do serwera
+            out.println(name);
+
+            // Wysyłamy zawartość pliku CSV do serwera, linia po linii
             Files.lines(Path.of(filepath)).forEach(line -> {
                 out.println(line);
                 try {
-                    Thread.sleep(2000); // 2-second delay
+                    // Czekamy 2 sekundy po każdej wysłanej linii
+                    Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             });
 
-            out.println("bye"); // Indicate end of transmission
+            // Wysyłamy wiadomość do serwera, informując o zakończeniu transmisji
+            out.println("bye");
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -8,15 +8,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+// Klasa zarządzająca kontami użytkowników
 public class AccountManager {
     private final DatabaseConnection dbConnection;
 
+    // Konstruktor klasy AccountManager
     public AccountManager(DatabaseConnection dbConnection) {
         this.dbConnection = dbConnection;
     }
 
+    // Metoda do rejestracji nowego użytkownika
     public void register(String username, String password) {
         try {
+            // Hashowanie hasła
             String hashedPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray());
             String insertSQL = "INSERT INTO account (username, password) VALUES (?, ?);";
             PreparedStatement statement = dbConnection.getConnection().prepareStatement(insertSQL);
@@ -29,6 +33,7 @@ public class AccountManager {
         }
     }
 
+    // Metoda do autentykacji użytkownika
     public boolean authenticate(String username, String password) throws SQLException {
         String querySQL = "SELECT password FROM account WHERE username = ?;";
         PreparedStatement statement = dbConnection.getConnection().prepareStatement(querySQL);
@@ -45,6 +50,7 @@ public class AccountManager {
         }
     }
 
+    // Metoda do pobierania konta użytkownika na podstawie nazwy użytkownika
     public Account getAccount(String username) throws SQLException {
         String querySQL = "SELECT id, username FROM account WHERE username = ?;";
         PreparedStatement statement = dbConnection.getConnection().prepareStatement(querySQL);
@@ -59,6 +65,7 @@ public class AccountManager {
         }
     }
 
+    // Metoda do pobierania konta użytkownika na podstawie ID
     public Account getAccount(int id) throws SQLException {
         String querySQL = "SELECT id, username FROM account WHERE id = ?;";
         PreparedStatement statement = dbConnection.getConnection().prepareStatement(querySQL);
